@@ -25,7 +25,21 @@ const crambUrl = url => {
 	});
 };
 
-// 爬取一组商品详情页url(提取商品详细信息)
+// 爬取指定的商品详情
+const crambProduct = link => {
+
+	return Promise.all([
+		crambUrl(link.infourl),
+		crambUrl(link.descurl)
+	]).then(query.getProduct).then(productInfo => {
+		sql.storage(link.thumbnail, productInfo);
+	}).catch(err => {
+		console.log(err);
+		console.log(link);
+	});
+};
+
+// 爬取一组商品详情
 const crambProducts = links => {
 
 	return new Promise((resolve, reject) => {
@@ -36,15 +50,7 @@ const crambProducts = links => {
 
 			if (i < links.length) {
 				const link = links[i];
-				Promise.all([
-					crambUrl(link.infourl),
-					crambUrl(link.descurl)
-				]).then(query.getProduct).then(productInfo => {
-					sql.storage(link.thumbnail, productInfo);
-				}).catch(err => {
-					console.log(err);
-					console.log(link);
-				}).then(() => {
+				crambProduct(link).then(() => {
 					i ++;
 					crambProductsUrl();
 				}).catch(err => {
