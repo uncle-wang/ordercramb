@@ -1,0 +1,26 @@
+{
+  "name": "ordercramb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/uncle-wang/ordercramb.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/uncle-wang/ordercramb/issues"
+  },
+  "homepage": "https://github.com/uncle-wang/ordercramb#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "express": "^4.16.3",
+    "mysql": "^2.15.0",
+    "node-schedule": "^1.3.0",
+    "request": "^2.87.0"
+  }
+}
