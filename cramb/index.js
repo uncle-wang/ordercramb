@@ -40,7 +40,7 @@ const crambProducts = links => {
 					crambUrl(link.infourl),
 					crambUrl(link.descurl)
 				]).then(query.getProduct).then(productInfo => {
-					return sql.storage(link.thumbnail, productInfo);
+					sql.storage(link.thumbnail, productInfo);
 				}).catch(err => {
 					console.log(err);
 					console.log(link);
