@@ -11,14 +11,19 @@ const crambUrl = url => {
 		request({url, timeout: 10000}, (err, response, data) => {
 
 			if (err) {
-				reject(err);
+				if (err.code === 'ESOCKETTIMEDOUT') {
+					reject({code: 1001, msg: url});
+				}
+				else {
+					reject(err);
+				}
 			}
 			else {
 				if (data) {
 					resolve(data);
 				}
 				else {
-					reject('[CRAMBURL]: null data');
+					reject({code: 1002, msg: url});
 				}
 			}
 		});
@@ -28,14 +33,21 @@ const crambUrl = url => {
 // 爬取指定的商品详情
 const crambProduct = link => {
 
-	return Promise.all([
-		crambUrl(link.infourl),
-		crambUrl(link.descurl)
-	]).then(query.getProduct).then(productInfo => {
-		sql.storage(link.thumbnail, productInfo);
+	return crambUrl(link.url).then(query.getProduct).then(productInfo => {
+		return sql.storage(link.thumbnail, productInfo);
+	}).then(code => {
+		console.log('[1000] ' + code);
 	}).catch(err => {
-		console.log(err);
-		console.log(link);
+		if (err) {
+			if (err.code) {
+				var msg = err.code + ' ' + (err.msg || link.url);
+				console.log(msg);
+			}
+			else {
+				console.log(err);
+				console.log(link.url);
+			}
+		}
 	});
 };
 
